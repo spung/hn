@@ -1,0 +1,99 @@
+package com.hn.items;
+
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import com.hn.R;
+import com.hn.data.Item;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import io.reactivex.Observer;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
+
+/**
+ * Created by stevenpungdumri on 6/25/17.
+ */
+
+public class TopItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private static final int NORMAL_ITEM_TYPE = 0;
+    private static final int LOADING_ITEM_TYPE = 1;
+
+    private TopItemsViewModel mTopItemsViewModel;
+    private List<Item> mItems;
+
+    public TopItemsAdapter(TopItemsViewModel topItemsViewModel) {
+        mTopItemsViewModel = topItemsViewModel;
+        mItems = new ArrayList<>();
+        mTopItemsViewModel.bindItems().subscribe(new Observer<List<Item>>() {
+            @Override
+            public void onSubscribe(@NonNull Disposable d) {}
+
+            @Override
+            public void onNext(@NonNull List<Item> items) {
+                int priorSize = mItems.size();
+                mItems.addAll(items);
+                notifyItemInserted(priorSize);
+            }
+
+            @Override
+            public void onError(@NonNull Throwable e) {}
+
+            @Override
+            public void onComplete() {}
+        });
+
+        mTopItemsViewModel.reachedEndOfList();
+    }
+
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
+        RecyclerView.ViewHolder vh;
+
+        switch (viewType) {
+            case LOADING_ITEM_TYPE:
+                View loadingView = layoutInflater.inflate(R.layout.layout_loading_item, parent, false);
+                vh = new LoadingItemViewHolder(loadingView);
+                break;
+            case NORMAL_ITEM_TYPE:
+            default:
+                View v = layoutInflater.inflate(R.layout.layout_item, parent, false);
+                vh = new ItemViewHolder(v);
+                break;
+        }
+
+        return vh;
+    }
+
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+         switch (getItemViewType(position)) {
+            case LOADING_ITEM_TYPE:
+                mTopItemsViewModel.reachedEndOfList();
+                break;
+            case NORMAL_ITEM_TYPE:
+            default:
+                ((ItemViewHolder) holder).bindItem(mItems.get(position));
+                break;
+        }
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (position == mItems.size()) {
+            return LOADING_ITEM_TYPE;
+        } else {
+            return NORMAL_ITEM_TYPE;
+        }
+    }
+
+    @Override
+    public int getItemCount() {
+        return mItems.size() > 0 ? mItems.size() + 1 : mItems.size();
+    }
+}
