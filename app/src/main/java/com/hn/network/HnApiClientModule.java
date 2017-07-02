@@ -15,6 +15,7 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.moshi.MoshiConverterFactory;
+import timber.log.Timber;
 
 /**
  * Created by stevenpungdumri on 6/3/17.
@@ -30,8 +31,14 @@ public class HnApiClientModule implements ApiClient {
     }
 
     public HnApiClientModule() {
-        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
+            @Override
+            public void log(String message) {
+                Timber.d(message);
+            }
+        });
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+
         OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
 
         Retrofit retrofit = new Retrofit.Builder()
