@@ -7,9 +7,10 @@ import java.util.List;
 import dagger.Module;
 import dagger.Provides;
 import io.reactivex.Observable;
-import io.reactivex.Single;
+import io.reactivex.ObservableSource;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Function;
+import io.reactivex.functions.Predicate;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -54,7 +55,7 @@ public class HnApiClientModule implements ApiClient {
         return mApi.getTopItemIds();
     }
 
-    public Single<List<Item>> getItems(List<Long> ids) {
+    public Observable<Item> getItems(List<Long> ids) {
         return Observable.just(ids)
             .concatMapIterable(new Function<List<Long>, List<Long>>() { // break out list of ids into separate observables
                 @Override
@@ -68,6 +69,36 @@ public class HnApiClientModule implements ApiClient {
                     return mApi.getItem(id);
                 }
             })
-            .toList();
+            .filter(new Predicate<Item>() {
+                @Override
+                public boolean test(@NonNull Item item) throws Exception {
+                    return !item.getDead() && !item.getDeleted();
+                }
+            });
+    }
+
+    @Override
+    public Observable<Item> getComments(final Item parentItem) {
+        if (parentItem.getKids() == null || parentItem.getKids().isEmpty()) {
+            return Observable.just(parentItem);
+        } else {
+            return Observable.merge(
+                Observable.just(parentItem),
+                Observable.fromArray(parentItem.getKids())
+                    .flatMap(new Function<List<Long>, ObservableSource<Item>>() {
+                        @Override
+                        public ObservableSource<Item> apply(@NonNull List<Long> longs) throws Exception {
+                            return getItems(longs);
+                        }
+                    })
+                    .flatMap(new Function<Item, ObservableSource<Item>>() {
+                        @Override
+                        public ObservableSource<Item> apply(@NonNull Item item) throws Exception {
+                            item.setIndentation(parentItem.getIndentation() + 1);
+                            return getComments(item);
+                        }
+                    })
+            );
+        }
     }
 }

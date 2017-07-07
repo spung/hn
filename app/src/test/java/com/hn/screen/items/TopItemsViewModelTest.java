@@ -1,4 +1,4 @@
-package com.hn.items;
+package com.hn.screen.items;
 
 import org.junit.Before;
 import org.junit.Test;

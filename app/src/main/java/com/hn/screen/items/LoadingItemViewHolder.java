@@ -1,4 +1,4 @@
-package com.hn.items;
+package com.hn.screen.items;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;

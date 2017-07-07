@@ -1,4 +1,4 @@
-package com.hn.items;
+package com.hn.screen.items;
 
 import com.hn.data.Item;
 import com.hn.network.ApiClient;
@@ -56,6 +56,7 @@ public class TopItemsProviderModule {
         }
 
         mApiClient.getItems(mIds.subList(0, mItemsPerPage))
+            .toList()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(new SingleObserver<List<Item>>() {

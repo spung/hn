@@ -1,4 +1,4 @@
-package com.hn.items;
+package com.hn.screen.items;
 
 import com.hn.data.Item;
 import com.hn.network.ApiClient;
@@ -44,11 +44,11 @@ public class TopItemsProviderModuleTest {
         TestObserver<List<Item>> itemObserver = mTopItemsProviderModule.bind().test();
 
         mTopItemsProviderModule.fetchMoreItems();
-        assertEquals(itemObserver.values().get(0).get(0).getId(), 0);
-        assertEquals(itemObserver.values().get(0).size(), mItemsPerPage);
+        assertEquals(0, itemObserver.values().get(0).get(0).getId());
+        assertEquals(mItemsPerPage, itemObserver.values().get(0).size());
 
         mTopItemsProviderModule.fetchMoreItems();
-        assertEquals(itemObserver.values().get(1).get(0).getId(), mItemsPerPage);
-        assertEquals(itemObserver.values().get(1).size(), mItemsPerPage);
+        assertEquals(mItemsPerPage, itemObserver.values().get(1).get(0).getId());
+        assertEquals(mItemsPerPage, itemObserver.values().get(1).size());
     }
 }

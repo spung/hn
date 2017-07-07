@@ -1,13 +1,11 @@
 package com.hn.network;
 
-import com.hn.data.HNItemType;
 import com.hn.data.Item;
+import com.hn.shared.MockItem;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
-import io.reactivex.Single;
 
 /**
  * Created by stevenpungdumri on 6/28/17.
@@ -20,31 +18,22 @@ public class MockApiClientModule implements ApiClient {
         mIds = ids;
     }
 
+    public MockApiClientModule() {}
+
+    @Override
     public Observable<List<Long>> getTopItemIds() {
         return Observable.just(mIds);
     }
 
-    public Single<List<Item>> getItems(List<Long> ids) {
-        List<Item> items = new ArrayList<>();
-        for(Long id : ids) {
-            items.add(new Item(
-                id,
-                false,
-                HNItemType.values()[0],
-                "test",
-                0,
-                "text",
-                false,
-                1,
-                1,
-                new long[] {10},
-                "test",
-                1,
-                "test",
-                new long[] {10},
-                1
-            ));
-        }
-        return Single.just(items);
+    @Override
+    public Observable<Item> getItems(List<Long> ids) {
+        return Observable.fromIterable(MockItem.createMockItems(ids));
     }
+
+    @Override
+    public Observable<Item> getComments(Item item) {
+        return Observable.just(MockItem.createMockItem(0));
+    }
+
+
 }

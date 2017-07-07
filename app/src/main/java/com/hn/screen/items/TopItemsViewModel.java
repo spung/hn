@@ -1,6 +1,10 @@
-package com.hn.items;
+package com.hn.screen.items;
+
+import android.content.Intent;
 
 import com.hn.data.Item;
+import com.hn.screen.itemdetail.ItemDetailActivity;
+import com.hn.shared.Launcher;
 
 import java.util.List;
 
@@ -14,10 +18,15 @@ import io.reactivex.Observable;
 
 public class TopItemsViewModel {
     private TopItemsProviderModule mTopItemsProviderModule;
+    private Launcher mLauncher;
 
     @Inject
     public TopItemsViewModel(TopItemsProviderModule topItemsProviderModule) {
         mTopItemsProviderModule = topItemsProviderModule;
+    }
+
+    public void setLauncher(Launcher launcher) {
+        mLauncher = launcher;
     }
 
     public Observable<List<Item>> bindItems() {
@@ -26,5 +35,11 @@ public class TopItemsViewModel {
 
     public void reachedEndOfList() {
         mTopItemsProviderModule.fetchMoreItems();
+    }
+
+    public void launchItemDetail(Item item) {
+        Intent intent = new Intent(mLauncher.getContext(), ItemDetailActivity.class);
+        intent.putExtra(ItemDetailActivity.EXTRA_ITEM, item);
+        mLauncher.launchActivity(intent);
     }
 }

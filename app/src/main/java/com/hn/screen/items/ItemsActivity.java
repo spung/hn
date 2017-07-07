@@ -1,4 +1,4 @@
-package com.hn.items;
+package com.hn.screen.items;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -32,6 +32,7 @@ public class ItemsActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         mTopItemsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mTopItemsViewModel.setLauncher(this);
         mTopItemsRecyclerView.setAdapter(new TopItemsAdapter(mTopItemsViewModel));
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mTopItemsRecyclerView.getContext(),
             DividerItemDecoration.VERTICAL);

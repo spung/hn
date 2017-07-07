@@ -4,7 +4,7 @@ import android.app.Application;
 
 import com.crashlytics.android.Crashlytics;
 import com.hn.BuildConfig;
-import com.hn.items.TopItemsProviderModule;
+import com.hn.screen.items.TopItemsProviderModule;
 
 import io.fabric.sdk.android.Fabric;
 import timber.log.Timber;

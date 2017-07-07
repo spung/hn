@@ -1,8 +1,7 @@
-package com.hn.items;
+package com.hn.screen.items;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import com.hn.R;
@@ -53,21 +52,19 @@ public class TopItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        RecyclerView.ViewHolder vh;
 
         switch (viewType) {
             case LOADING_ITEM_TYPE:
-                View loadingView = layoutInflater.inflate(R.layout.layout_loading_item, parent, false);
-                vh = new LoadingItemViewHolder(loadingView);
-                break;
+                return new LoadingItemViewHolder(layoutInflater.inflate(R.layout.layout_loading_item, parent, false));
             case NORMAL_ITEM_TYPE:
             default:
-                View v = layoutInflater.inflate(R.layout.layout_item, parent, false);
-                vh = new ItemViewHolder(v);
-                break;
+                return new ItemViewHolder(layoutInflater.inflate(R.layout.layout_item, parent, false), new ItemClickListener() {
+                    @Override
+                    public void onItemClicked(Item item) {
+                        mTopItemsViewModel.launchItemDetail(item);
+                    }
+                });
         }
-
-        return vh;
     }
 
     @Override
