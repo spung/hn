@@ -7,9 +7,10 @@ import android.view.ViewGroup;
 import com.hn.R;
 import com.hn.data.Item;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.SingleObserver;
+import io.reactivex.Observer;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
 
@@ -24,18 +25,22 @@ public class ItemDetailAdapter extends RecyclerView.Adapter {
     private List<Item> mItems;
 
     public ItemDetailAdapter(ItemDetailViewModel itemDetailViewModel) {
-        itemDetailViewModel.bind().subscribe(new SingleObserver<List<Item>>() {
+        mItems = new ArrayList<>();
+        itemDetailViewModel.bind().subscribe(new Observer<Item>() {
             @Override
             public void onSubscribe(@NonNull Disposable d) {}
 
             @Override
-            public void onSuccess(@NonNull List<Item> items) {
-                mItems = items;
-                notifyDataSetChanged();
+            public void onNext(@NonNull Item item) {
+                mItems.add(item);
+                notifyItemInserted(mItems.size());
             }
 
             @Override
             public void onError(@NonNull Throwable e) {}
+
+            @Override
+            public void onComplete() {}
         });
     }
 

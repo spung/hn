@@ -9,9 +9,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.util.List;
-
-import io.reactivex.Single;
+import io.reactivex.Observable;
 
 import static junit.framework.Assert.assertEquals;
 import static org.mockito.Mockito.when;
@@ -28,7 +26,7 @@ public class ItemDetailAdapterTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        when(mItemDetailViewModel.bind()).thenReturn(Single.<List<Item>>never());
+        when(mItemDetailViewModel.bind()).thenReturn(Observable.<Item>never());
     }
 
     @Test

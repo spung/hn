@@ -3,9 +3,7 @@ package com.hn.screen.itemdetail;
 import com.hn.data.Item;
 import com.hn.shared.CommentsProvider;
 
-import java.util.List;
-
-import io.reactivex.Single;
+import io.reactivex.Observable;
 
 /**
  * Created by stevenpungdumri on 7/5/17.
@@ -18,7 +16,7 @@ public class ItemDetailViewModel {
         mCommentsProvider = commentsProvider;
     }
 
-    public Single<List<Item>> bind() {
+    public Observable<Item> bind() {
         return mCommentsProvider.bind();
     }
 }

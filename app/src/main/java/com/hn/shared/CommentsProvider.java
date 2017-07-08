@@ -3,9 +3,7 @@ package com.hn.shared;
 import com.hn.data.Item;
 import com.hn.network.ApiClient;
 
-import java.util.List;
-
-import io.reactivex.Single;
+import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
@@ -22,14 +20,13 @@ public class CommentsProvider {
         mApiClient = apiClient;
     }
 
-    public Single<List<Item>> bind() {
+    public Observable<Item> bind() {
         if (mItem.getComments() != null && !mItem.getComments().isEmpty()) {
-            return Single.just(mItem.getComments());
+            return Observable.fromIterable(mItem.getComments());
         }
 
         return mApiClient.getComments(mItem)
             .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .toList();
+            .observeOn(AndroidSchedulers.mainThread());
     }
 }
