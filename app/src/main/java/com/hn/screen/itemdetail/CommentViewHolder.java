@@ -30,7 +30,7 @@ public class CommentViewHolder extends RecyclerView.ViewHolder {
     public void bindView(Item item) {
         mItem = item;
         mAuthorTextView.setText(mItem.getBy());
-        mTextTextView.setText(Html.fromHtml(item.getText()));
+        mTextTextView.setText(Html.fromHtml(item.getText()).toString().trim());
         itemView.setPadding(
             ResHelper.getDimen(itemView.getContext(), R.dimen.indentation_spacing) * item.getIndentation(),
             itemView.getPaddingTop(),

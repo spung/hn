@@ -24,7 +24,7 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
-        itemsPerPage = 15
+        itemsPerPage = 25
     }
     buildTypes {
         release {
