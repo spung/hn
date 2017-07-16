@@ -17,7 +17,6 @@ import butterknife.ButterKnife;
 public class ItemDetailViewHolder extends RecyclerView.ViewHolder {
     private Item mItem;
 
-    @BindView(R.id.title) TextView mTitleTextView;
     @BindView(R.id.author) TextView mAuthorTextView;
     @BindView(R.id.text) TextView mTextTextView;
     @BindView(R.id.url) TextView mUrlTextView;
@@ -29,7 +28,6 @@ public class ItemDetailViewHolder extends RecyclerView.ViewHolder {
 
     public void bindView(Item item) {
         mItem = item;
-        mTitleTextView.setText(mItem.getTitle());
         mAuthorTextView.setText(mItem.getBy());
         mTextTextView.setText(mItem.getText());
         mUrlTextView.setText(mItem.getUrl());

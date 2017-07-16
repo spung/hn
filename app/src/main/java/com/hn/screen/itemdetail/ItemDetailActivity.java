@@ -38,7 +38,9 @@ public class ItemDetailActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         Item item = getIntent().getParcelableExtra(EXTRA_ITEM);
-        mItemDetailViewModel = new ItemDetailViewModel(new CommentsProvider(mApiClient, item));
+
+        mItemDetailViewModel = new ItemDetailViewModel(item, new CommentsProvider(mApiClient, item));
+        getSupportActionBar().setTitle(mItemDetailViewModel.getItemTitle());
 
         mCommentsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mCommentsRecyclerView.setAdapter(new ItemDetailAdapter(mItemDetailViewModel));

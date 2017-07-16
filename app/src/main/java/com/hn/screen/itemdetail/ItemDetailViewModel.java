@@ -11,9 +11,15 @@ import io.reactivex.Observable;
 
 public class ItemDetailViewModel {
     private CommentsProvider mCommentsProvider;
+    private Item mItem;
 
-    public ItemDetailViewModel(CommentsProvider commentsProvider) {
+    public ItemDetailViewModel(Item item, CommentsProvider commentsProvider) {
         mCommentsProvider = commentsProvider;
+        mItem = item;
+    }
+
+    public String getItemTitle() {
+        return mItem.getTitle();
     }
 
     public Observable<Item> bind() {
