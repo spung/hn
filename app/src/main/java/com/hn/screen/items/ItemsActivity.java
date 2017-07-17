@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 
 import com.hn.R;
 import com.hn.shared.BaseActivity;
+import com.hn.shared.ResHelper;
 
 import javax.inject.Inject;
 
@@ -36,6 +37,7 @@ public class ItemsActivity extends BaseActivity {
         mTopItemsRecyclerView.setAdapter(new TopItemsAdapter(mTopItemsViewModel));
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mTopItemsRecyclerView.getContext(),
             DividerItemDecoration.VERTICAL);
+        dividerItemDecoration.setDrawable(ResHelper.getDrawable(this, R.drawable.divider));
         mTopItemsRecyclerView.addItemDecoration(dividerItemDecoration);
     }
 }
