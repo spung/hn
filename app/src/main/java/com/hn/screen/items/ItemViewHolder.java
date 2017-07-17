@@ -17,7 +17,12 @@ import butterknife.ButterKnife;
 public class ItemViewHolder extends RecyclerView.ViewHolder {
     private Item mItem;
 
+    @BindView(R.id.index) TextView mIndexTextView;
     @BindView(R.id.title) TextView mTitleTextView;
+    @BindView(R.id.author) TextView mAuthor;
+    @BindView(R.id.score) TextView mScore;
+    @BindView(R.id.commentCount) TextView mCommentCount;
+    @BindView(R.id.commentSection) View mCommentSection;
 
     public ItemViewHolder(View itemView, final ItemClickListener clickListener) {
         super(itemView);
@@ -30,8 +35,18 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
         });
     }
 
-    public void bindItem(Item item) {
+    public void bindItem(Item item, int position) {
         mItem = item;
         mTitleTextView.setText(mItem.getTitle());
+        mIndexTextView.setText("" + position);
+        mAuthor.setText(mItem.getBy());
+        mScore.setText("+" + mItem.getScore());
+
+        mCommentCount.setText(mItem.getDescendants() + "");
+        if (mItem.getDescendants() > 0) {
+            mCommentSection.setAlpha(1.0f);
+        } else {
+            mCommentSection.setAlpha(0.25f);
+        }
     }
 }

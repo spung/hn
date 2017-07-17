@@ -36,7 +36,7 @@ public class TopItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             public void onNext(@NonNull List<Item> items) {
                 int priorSize = mItems.size();
                 mItems.addAll(items);
-                notifyItemInserted(priorSize);
+                notifyItemRangeInserted(priorSize, items.size());
             }
 
             @Override
@@ -75,7 +75,7 @@ public class TopItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 break;
             case NORMAL_ITEM_TYPE:
             default:
-                ((ItemViewHolder) holder).bindItem(mItems.get(position));
+                ((ItemViewHolder) holder).bindItem(mItems.get(position), position + 1);
                 break;
         }
     }
