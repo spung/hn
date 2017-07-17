@@ -43,20 +43,24 @@
     </style>
 
     <style name="Label" parent="BaseText">
-        <item name="android:textSize">13sp</item>
+        <item name="android:textSize">12sp</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:textColor">@color/dark_grey</item>
     </style>
 
-    <style name="LabelSecondary" parent="BaseText">
-        <item name="android:textSize">13sp</item>
-        <item name="android:textAllCaps">true</item>
+    <style name="LabelSecondary" parent="Label">
         <item name="android:textColor">@color/light_grey</item>
     </style>
 
-    <style name="Body" parent="BaseText">
-        <item name="android:textSize">13sp</item>
+    <style name="LabelHighlight" parent="Label">
         <item name="android:textColor">@color/dark_grey</item>
+        <item name="fontPath">@string/font_regular</item>
+    </style>
+
+    <style name="Body" parent="BaseText">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/dark_grey</item>
+        <item name="fontPath">@string/font_regular</item>
     </style>
 
 </resources>
