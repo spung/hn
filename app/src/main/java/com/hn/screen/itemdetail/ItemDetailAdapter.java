@@ -1,5 +1,6 @@
 package com.hn.screen.itemdetail;
 
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -23,25 +24,35 @@ public class ItemDetailAdapter extends RecyclerView.Adapter {
     public static final int VIEW_TYPE_COMMENT = 1;
 
     private List<Item> mItems;
+    private boolean mComplete;
 
-    public ItemDetailAdapter(ItemDetailViewModel itemDetailViewModel) {
-        mItems = new ArrayList<>();
-        itemDetailViewModel.bind().subscribe(new Observer<Item>() {
-            @Override
-            public void onSubscribe(@NonNull Disposable d) {}
+    public ItemDetailAdapter(ItemDetailViewModel itemDetailViewModel, ArrayList restoredItems) {
+        if (restoredItems == null) {
+            mItems = new ArrayList<>();
+            itemDetailViewModel.bind().subscribe(new Observer<Item>() {
+                @Override
+                public void onSubscribe(@NonNull Disposable d) {
+                }
 
-            @Override
-            public void onNext(@NonNull Item comment) {
-                mItems.add(comment);
-                notifyItemInserted(mItems.size());
-            }
+                @Override
+                public void onNext(@NonNull Item comment) {
+                    mItems.add(comment);
+                    notifyItemInserted(mItems.size());
+                }
 
-            @Override
-            public void onError(@NonNull Throwable e) {}
+                @Override
+                public void onError(@NonNull Throwable e) {
+                }
 
-            @Override
-            public void onComplete() {}
-        });
+                @Override
+                public void onComplete() {
+                    mComplete = true;
+                }
+            });
+        } else {
+            mItems = restoredItems;
+            mComplete = true;
+        }
     }
 
     @Override
@@ -80,5 +91,11 @@ public class ItemDetailAdapter extends RecyclerView.Adapter {
     @Override
     public int getItemCount() {
         return mItems == null ? 0 : mItems.size();
+    }
+
+    public void onSaveInstanceState(Bundle bundle, String key) {
+        if (mComplete) {
+            bundle.putParcelableArrayList(key, (ArrayList) mItems);
+        }
     }
 }
