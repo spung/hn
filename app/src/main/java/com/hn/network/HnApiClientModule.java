@@ -83,12 +83,6 @@ public class HnApiClientModule implements ApiClient {
                     return mApi.getItem(id);
                 }
             })
-            .filter(new Predicate<Item>() {
-                @Override
-                public boolean test(@NonNull Item item) throws Exception {
-                    return !item.getDead() && !item.getDeleted();
-                }
-            })
             .doOnEach(new Observer<Item>() {
                 @Override
                 public void onSubscribe(@NonNull Disposable d) {}
@@ -103,6 +97,12 @@ public class HnApiClientModule implements ApiClient {
 
                 @Override
                 public void onComplete() {}
+            })
+            .filter(new Predicate<Item>() {
+                @Override
+                public boolean test(@NonNull Item item) throws Exception {
+                    return !item.getDead() && !item.getDeleted();
+                }
             });
     }
 

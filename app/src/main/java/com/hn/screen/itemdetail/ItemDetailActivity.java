@@ -10,7 +10,6 @@ import com.hn.R;
 import com.hn.data.Item;
 import com.hn.network.ApiClient;
 import com.hn.shared.BaseActivity;
-import com.hn.shared.CommentsProvider;
 import com.hn.shared.ResHelper;
 
 import javax.inject.Inject;
@@ -41,7 +40,7 @@ public class ItemDetailActivity extends BaseActivity {
         Item item = getIntent().getParcelableExtra(EXTRA_ITEM);
 
         mItemDetailViewModel = new ItemDetailViewModel(item, new CommentsProvider(mApiClient, item));
-        getSupportActionBar().setTitle(mItemDetailViewModel.getItemTitle());
+//        getSupportActionBar().setTitle(mItemDetailViewModel.getItemTitle());
 
         mCommentsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mCommentsRecyclerView.setAdapter(new ItemDetailAdapter(mItemDetailViewModel));

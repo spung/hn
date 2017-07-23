@@ -2,7 +2,6 @@ package com.hn.screen.itemdetail;
 
 import com.hn.data.Item;
 import com.hn.network.ApiClient;
-import com.hn.shared.CommentsProvider;
 import com.hn.shared.MockItem;
 import com.hn.shared.TestScheduler;
 

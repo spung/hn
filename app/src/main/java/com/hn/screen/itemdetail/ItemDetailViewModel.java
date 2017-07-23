@@ -1,7 +1,6 @@
 package com.hn.screen.itemdetail;
 
 import com.hn.data.Item;
-import com.hn.shared.CommentsProvider;
 
 import io.reactivex.Observable;
 

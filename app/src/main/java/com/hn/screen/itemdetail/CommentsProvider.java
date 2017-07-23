@@ -1,4 +1,4 @@
-package com.hn.shared;
+package com.hn.screen.itemdetail;
 
 import com.hn.data.Item;
 import com.hn.network.ApiClient;

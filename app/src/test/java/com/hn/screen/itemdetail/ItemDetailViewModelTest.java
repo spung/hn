@@ -1,7 +1,6 @@
 package com.hn.screen.itemdetail;
 
 import com.hn.data.Item;
-import com.hn.shared.CommentsProvider;
 import com.hn.shared.MockItem;
 
 import org.junit.Before;

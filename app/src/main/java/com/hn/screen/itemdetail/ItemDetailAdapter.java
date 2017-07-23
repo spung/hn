@@ -31,8 +31,8 @@ public class ItemDetailAdapter extends RecyclerView.Adapter {
             public void onSubscribe(@NonNull Disposable d) {}
 
             @Override
-            public void onNext(@NonNull Item item) {
-                mItems.add(item);
+            public void onNext(@NonNull Item comment) {
+                mItems.add(comment);
                 notifyItemInserted(mItems.size());
             }
 
