@@ -11,6 +11,7 @@ import com.hn.data.Item;
 import com.hn.network.ApiClient;
 import com.hn.shared.BaseActivity;
 import com.hn.shared.CommentsProvider;
+import com.hn.shared.ResHelper;
 
 import javax.inject.Inject;
 
@@ -46,6 +47,7 @@ public class ItemDetailActivity extends BaseActivity {
         mCommentsRecyclerView.setAdapter(new ItemDetailAdapter(mItemDetailViewModel));
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mCommentsRecyclerView.getContext(),
             DividerItemDecoration.VERTICAL);
+        dividerItemDecoration.setDrawable(ResHelper.getDrawable(this, R.drawable.divider));
         mCommentsRecyclerView.addItemDecoration(dividerItemDecoration);
     }
 }
