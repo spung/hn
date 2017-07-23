@@ -42,4 +42,8 @@ public class TopItemsViewModel {
         intent.putExtra(ItemDetailActivity.EXTRA_ITEM, item);
         mLauncher.launchActivity(intent);
     }
+
+    public void setLastIndex(int index) {
+        mTopItemsProviderModule.setIndex(index);
+    }
 }

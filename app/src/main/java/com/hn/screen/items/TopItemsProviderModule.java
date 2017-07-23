@@ -52,16 +52,26 @@ public class TopItemsProviderModule {
         return mItemsPubSub;
     }
 
+    public void setIndex(int index) {
+        mIndex = index;
+    }
+
     public void fetchMoreItems() {
         if (mIds == null || mIds.isEmpty()) {
             fetchTopItemIds();
             return;
         }
 
-        if (mFetchingItems) return;
+        if (mFetchingItems || mIndex == mIds.size()) return;
         mFetchingItems = true;
 
-        mApiClient.getItems(mIds.subList(mIndex, mIndex + mItemsPerPage))
+        int toIndex = mIndex + mItemsPerPage;
+        if (mIndex >= mIds.size()) {
+            mIndex = Math.min(mIndex, mIds.size());
+            toIndex = mIds.size();
+        }
+
+        mApiClient.getItems(mIds.subList(mIndex, toIndex))
             .buffer(STORIES_BUFFER)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -89,8 +99,6 @@ public class TopItemsProviderModule {
     }
 
     private void fetchTopItemIds() {
-        mIndex = 0;
-
         if (mIds != null && !mIds.isEmpty()) return;
 
         mApiClient.getTopItemIds()

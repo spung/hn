@@ -12,6 +12,8 @@ import com.hn.R;
 import com.hn.shared.BaseActivity;
 import com.hn.shared.ResHelper;
 
+import java.util.ArrayList;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
@@ -22,6 +24,8 @@ import butterknife.ButterKnife;
  */
 
 public class ItemsActivity extends BaseActivity {
+    private static final String LAYOUT_MANAGER = "layout_manager";
+    private static final String ADAPTER_DATASET = "adapter_dataset";
 
     @Inject TopItemsViewModel mTopItemsViewModel;
 
@@ -41,10 +45,26 @@ public class ItemsActivity extends BaseActivity {
 
         mTopItemsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mTopItemsViewModel.setLauncher(this);
-        mTopItemsRecyclerView.setAdapter(new TopItemsAdapter(mTopItemsViewModel));
+        ArrayList previousDataset = savedInstanceState == null ?
+            null : savedInstanceState.getParcelableArrayList(ADAPTER_DATASET);
+        mTopItemsRecyclerView.setAdapter(new TopItemsAdapter(mTopItemsViewModel, previousDataset));
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mTopItemsRecyclerView.getContext(),
             DividerItemDecoration.VERTICAL);
         dividerItemDecoration.setDrawable(ResHelper.getDrawable(this, R.drawable.divider));
         mTopItemsRecyclerView.addItemDecoration(dividerItemDecoration);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putParcelable(LAYOUT_MANAGER, mTopItemsRecyclerView.getLayoutManager().onSaveInstanceState());
+        TopItemsAdapter adapter = (TopItemsAdapter) mTopItemsRecyclerView.getAdapter();
+        adapter.onSaveInstanceState(outState, ADAPTER_DATASET);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(final Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        mTopItemsRecyclerView.getLayoutManager().onRestoreInstanceState(savedInstanceState.getParcelable(LAYOUT_MANAGER));
     }
 }

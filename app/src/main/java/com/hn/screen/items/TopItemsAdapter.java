@@ -1,5 +1,6 @@
 package com.hn.screen.items;
 
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -27,9 +28,8 @@ public class TopItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private TopItemsViewModel mTopItemsViewModel;
     private List<Item> mItems;
 
-    public TopItemsAdapter(TopItemsViewModel topItemsViewModel) {
+    public TopItemsAdapter(TopItemsViewModel topItemsViewModel, ArrayList restoredItems) {
         mTopItemsViewModel = topItemsViewModel;
-        mItems = new ArrayList<>();
         mTopItemsViewModel.bindItems().subscribe(new Observer<List<Item>>() {
             @Override
             public void onSubscribe(@NonNull Disposable d) {}
@@ -48,7 +48,13 @@ public class TopItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             public void onComplete() {}
         });
 
-        mTopItemsViewModel.reachedEndOfList();
+        if (restoredItems == null) {
+            mItems = new ArrayList<>();
+            mTopItemsViewModel.reachedEndOfList();
+        } else {
+            mItems = restoredItems;
+            mTopItemsViewModel.setLastIndex(restoredItems.size());
+        }
     }
 
     @Override
@@ -89,6 +95,10 @@ public class TopItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         } else {
             return NORMAL_ITEM_TYPE;
         }
+    }
+
+    public void onSaveInstanceState(Bundle bundle, String key) {
+        bundle.putParcelableArrayList(key, (ArrayList) mItems);
     }
 
     @Override
