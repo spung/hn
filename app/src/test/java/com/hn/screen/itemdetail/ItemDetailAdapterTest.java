@@ -31,8 +31,8 @@ public class ItemDetailAdapterTest {
 
     @Test
     public void testItemViewTypeValues() {
-        ItemDetailAdapter adapter = new ItemDetailAdapter(mItemDetailViewModel);
-        assertEquals(ItemDetailAdapter.VIEW_TYPE_ITEM_DETAIL, adapter.getItemViewType(0));
-        assertEquals(ItemDetailAdapter.VIEW_TYPE_COMMENT, adapter.getItemViewType(10));
+        CommentsAdapter adapter = new CommentsAdapter(mItemDetailViewModel);
+        assertEquals(CommentsAdapter.VIEW_TYPE_ITEM_DETAIL, adapter.getItemViewType(0));
+        assertEquals(CommentsAdapter.VIEW_TYPE_COMMENT, adapter.getItemViewType(10));
     }
 }

@@ -1,17 +1,23 @@
 package com.hn.screen.itemdetail;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.TextView;
 
 import com.hn.R;
 import com.hn.data.Item;
 import com.hn.network.ApiClient;
 import com.hn.shared.BaseActivity;
+import com.hn.shared.FontUtil;
 import com.hn.shared.ResHelper;
+
+import net.opacapp.multilinecollapsingtoolbar.CollapsingToolbarLayout;
 
 import java.util.ArrayList;
 
@@ -35,6 +41,10 @@ public class ItemDetailActivity extends BaseActivity {
 
     @BindView(R.id.comments) RecyclerView mCommentsRecyclerView;
     @BindView(R.id.progressBar) View mProgressBarView;
+    @BindView(R.id.toolbar) Toolbar mToolbar;
+    @BindView(R.id.collapsingToolbar) CollapsingToolbarLayout mCollapsingToolbarLayout;
+
+    @BindView(R.id.author) TextView mAuthorTextView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -46,12 +56,11 @@ public class ItemDetailActivity extends BaseActivity {
         Item item = getIntent().getParcelableExtra(EXTRA_ITEM);
 
         mItemDetailViewModel = new ItemDetailViewModel(item, new CommentsProvider(mApiClient, item));
-//        getSupportActionBar().setTitle(mItemDetailViewModel.getItemTitle());
 
         mCommentsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         ArrayList restoredData = savedInstanceState == null ? null : savedInstanceState.getParcelableArrayList(ADAPTER_DATASET);
-        mCommentsRecyclerView.setAdapter(new ItemDetailAdapter(mItemDetailViewModel, restoredData,
-            new ItemDetailAdapter.FirstItemListener() {
+        mCommentsRecyclerView.setAdapter(new CommentsAdapter(mItemDetailViewModel, restoredData,
+            new CommentsAdapter.FirstItemListener() {
                 @Override
                 public void onFirstItemFetched() {
                     mProgressBarView.setVisibility(View.GONE);
@@ -61,12 +70,17 @@ public class ItemDetailActivity extends BaseActivity {
             DividerItemDecoration.VERTICAL);
         dividerItemDecoration.setDrawable(ResHelper.getDrawable(this, R.drawable.divider));
         mCommentsRecyclerView.addItemDecoration(dividerItemDecoration);
+
+        Typeface typeface = FontUtil.getDefaultFont(this);
+        initCollapsingToolbar(item.getTitle(), R.drawable.back, typeface, typeface);
+
+        initItemDetailViews(item);
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putParcelable(LAYOUT_MANAGER, mCommentsRecyclerView.getLayoutManager().onSaveInstanceState());
-        ((ItemDetailAdapter) mCommentsRecyclerView.getAdapter()).onSaveInstanceState(outState, ADAPTER_DATASET);
+        ((CommentsAdapter) mCommentsRecyclerView.getAdapter()).onSaveInstanceState(outState, ADAPTER_DATASET);
         super.onSaveInstanceState(outState);
     }
 
@@ -74,5 +88,24 @@ public class ItemDetailActivity extends BaseActivity {
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         mCommentsRecyclerView.getLayoutManager().onRestoreInstanceState(savedInstanceState.getParcelable(LAYOUT_MANAGER));
+    }
+
+    private void initItemDetailViews(Item item) {
+        mAuthorTextView.setText(item.getBy());
+    }
+
+    protected void initCollapsingToolbar(String title, int homeIcon, Typeface collapsedTypeface, Typeface expandedTypeface) {
+        setSupportActionBar(mToolbar);
+        mCollapsingToolbarLayout.setTitle(title);
+        mCollapsingToolbarLayout.setCollapsedTitleTypeface(collapsedTypeface);
+        mCollapsingToolbarLayout.setExpandedTitleTypeface(expandedTypeface);
+
+        mToolbar.setNavigationIcon(homeIcon);
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
     }
 }

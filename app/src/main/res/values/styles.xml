@@ -21,13 +21,14 @@
 
     <style name="Header1" parent="BaseText">
         <item name="android:textSize">24sp</item>
-        <item name="android:textAllCaps">true</item>
-        <item name="android:textColor">@color/dark_grey</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="fontPath">@string/font_regular</item>
     </style>
 
     <style name="Header2" parent="BaseText">
-        <item name="android:textSize">23sp</item>
-        <item name="android:textColor">@color/dark_grey</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="fontPath">@string/font_regular</item>
     </style>
 
     <style name="Header3" parent="BaseText">
@@ -61,6 +62,11 @@
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/dark_grey</item>
         <item name="fontPath">@string/font_regular</item>
+    </style>
+
+    <style name="BodyPlain">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/white</item>
     </style>
 
 </resources>

@@ -19,15 +19,13 @@ import io.reactivex.disposables.Disposable;
  * Created by stevenpungdumri on 7/5/17.
  */
 
-public class ItemDetailAdapter extends RecyclerView.Adapter {
-    public static final int VIEW_TYPE_ITEM_DETAIL = 0;
-    public static final int VIEW_TYPE_COMMENT = 1;
+public class CommentsAdapter extends RecyclerView.Adapter<CommentViewHolder> {
 
     private List<Item> mItems;
     private boolean mComplete;
 
-    public ItemDetailAdapter(ItemDetailViewModel itemDetailViewModel, ArrayList restoredItems,
-                             final FirstItemListener firstItemListener ) {
+    public CommentsAdapter(ItemDetailViewModel itemDetailViewModel, ArrayList restoredItems,
+                           final FirstItemListener firstItemListener ) {
         if (restoredItems == null) {
             mItems = new ArrayList<>();
             itemDetailViewModel.bind().subscribe(new Observer<Item>() {
@@ -59,41 +57,20 @@ public class ItemDetailAdapter extends RecyclerView.Adapter {
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public CommentViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-
-        switch (viewType) {
-            case VIEW_TYPE_ITEM_DETAIL:
-                return new ItemDetailViewHolder(layoutInflater.inflate(R.layout.layout_item_detail, parent, false));
-            case VIEW_TYPE_COMMENT:
-            default:
-                return new CommentViewHolder(layoutInflater.inflate(R.layout.layout_comment, parent, false));
-        }
+        return new CommentViewHolder(layoutInflater.inflate(R.layout.layout_comment, parent, false));
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        Item item = mItems.get(position);
-
-        switch (getItemViewType(position)) {
-            case VIEW_TYPE_ITEM_DETAIL:
-                ((ItemDetailViewHolder) holder).bindView(item);
-                break;
-            case VIEW_TYPE_COMMENT:
-                ((CommentViewHolder) holder).bindView(item);
-                break;
-        }
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-        if (position == 0) return VIEW_TYPE_ITEM_DETAIL;
-        return VIEW_TYPE_COMMENT;
+    public void onBindViewHolder(CommentViewHolder holder, int position) {
+        Item item = mItems.get(position + 1);
+        holder.bindView(item);
     }
 
     @Override
     public int getItemCount() {
-        return mItems == null ? 0 : mItems.size();
+        return mItems.size() - 1;
     }
 
     public void onSaveInstanceState(Bundle bundle, String key) {
