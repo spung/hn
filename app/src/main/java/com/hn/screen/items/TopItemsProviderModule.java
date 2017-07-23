@@ -11,7 +11,6 @@ import dagger.Module;
 import dagger.Provides;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
-import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
@@ -26,14 +25,18 @@ import io.reactivex.subjects.PublishSubject;
 @Module
 public class TopItemsProviderModule {
     private ApiClient mApiClient;
+    private static final String TAG = TopItemsProviderModule.class.getName();
+    private static final int STORIES_BUFFER = 1;
 
     private int mItemsPerPage;
     private List<Long> mIds;
+    private int mIndex;
     private PublishSubject mItemsPubSub = PublishSubject.create();
 
     public TopItemsProviderModule(int itemsPerPage) {
         mItemsPerPage = itemsPerPage;
     }
+    private boolean mFetchingItems = false;
 
     @Provides
     TopItemsProviderModule provideTopItemsProvider(ApiClient apiClient) {
@@ -55,18 +58,29 @@ public class TopItemsProviderModule {
             return;
         }
 
-        mApiClient.getItems(mIds.subList(0, mItemsPerPage))
-            .toList()
+        if (mFetchingItems) return;
+        mFetchingItems = true;
+
+        mApiClient.getItems(mIds.subList(mIndex, mIndex + mItemsPerPage))
+            .buffer(STORIES_BUFFER)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(new SingleObserver<List<Item>>() {
+            .subscribe(new Observer<List<Item>>() {
                 @Override
                 public void onSubscribe(@NonNull Disposable d) {}
 
                 @Override
-                public void onSuccess(@NonNull List<Item> items) {
+                public void onNext(@NonNull List<Item> items) {
                     mItemsPubSub.onNext(items);
-                    mIds = mIds.subList(mItemsPerPage, mIds.size());
+                }
+
+                @Override
+                public void onComplete() {
+                    if (mIds.size() > 0) {
+                        mIndex += mItemsPerPage;
+                    }
+
+                    mFetchingItems = false;
                 }
 
                 @Override
@@ -75,6 +89,10 @@ public class TopItemsProviderModule {
     }
 
     private void fetchTopItemIds() {
+        mIndex = 0;
+
+        if (mIds != null && !mIds.isEmpty()) return;
+
         mApiClient.getTopItemIds()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())

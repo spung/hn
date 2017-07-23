@@ -2,13 +2,19 @@ package com.hn.network;
 
 import com.hn.data.Item;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
+import io.reactivex.Observer;
 import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
 import okhttp3.OkHttpClient;
@@ -25,8 +31,10 @@ import timber.log.Timber;
 @Module
 public class HnApiClientModule implements ApiClient {
     private HackerNewsApi mApi;
+    private Map<Long, Item> mCache;
 
     @Provides
+    @Singleton
     ApiClient provideHnApiClient() {
         return new HnApiClientModule();
     }
@@ -49,6 +57,7 @@ public class HnApiClientModule implements ApiClient {
             .client(client)
             .build();
         mApi = retrofit.create(HackerNewsApi.class);
+        mCache = new HashMap<>();
     }
 
     public Observable<List<Long>> getTopItemIds() {
@@ -66,6 +75,11 @@ public class HnApiClientModule implements ApiClient {
             .concatMap(new Function<Long, Observable<Item>>() { // for each id, map to HNItem with API call
                 @Override
                 public Observable<Item> apply(@NonNull Long id) throws Exception {
+                    Item item = mCache.get(id);
+                    if (item != null) {
+                        return Observable.just(mCache.get(id));
+                    }
+
                     return mApi.getItem(id);
                 }
             })
@@ -74,6 +88,21 @@ public class HnApiClientModule implements ApiClient {
                 public boolean test(@NonNull Item item) throws Exception {
                     return !item.getDead() && !item.getDeleted();
                 }
+            })
+            .doOnEach(new Observer<Item>() {
+                @Override
+                public void onSubscribe(@NonNull Disposable d) {}
+
+                @Override
+                public void onNext(@NonNull Item item) {
+                    mCache.put(item.getId(), item);
+                }
+
+                @Override
+                public void onError(@NonNull Throwable e) {}
+
+                @Override
+                public void onComplete() {}
             });
     }
 
