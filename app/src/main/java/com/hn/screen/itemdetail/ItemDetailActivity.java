@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.hn.R;
 import com.hn.data.Item;
@@ -33,6 +34,7 @@ public class ItemDetailActivity extends BaseActivity {
     @Inject ApiClient mApiClient;
 
     @BindView(R.id.comments) RecyclerView mCommentsRecyclerView;
+    @BindView(R.id.progressBar) View mProgressBarView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,7 +50,13 @@ public class ItemDetailActivity extends BaseActivity {
 
         mCommentsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         ArrayList restoredData = savedInstanceState == null ? null : savedInstanceState.getParcelableArrayList(ADAPTER_DATASET);
-        mCommentsRecyclerView.setAdapter(new ItemDetailAdapter(mItemDetailViewModel, restoredData));
+        mCommentsRecyclerView.setAdapter(new ItemDetailAdapter(mItemDetailViewModel, restoredData,
+            new ItemDetailAdapter.FirstItemListener() {
+                @Override
+                public void onFirstItemFetched() {
+                    mProgressBarView.setVisibility(View.GONE);
+                }
+            }));
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mCommentsRecyclerView.getContext(),
             DividerItemDecoration.VERTICAL);
         dividerItemDecoration.setDrawable(ResHelper.getDrawable(this, R.drawable.divider));

@@ -26,23 +26,26 @@ public class ItemDetailAdapter extends RecyclerView.Adapter {
     private List<Item> mItems;
     private boolean mComplete;
 
-    public ItemDetailAdapter(ItemDetailViewModel itemDetailViewModel, ArrayList restoredItems) {
+    public ItemDetailAdapter(ItemDetailViewModel itemDetailViewModel, ArrayList restoredItems,
+                             final FirstItemListener firstItemListener ) {
         if (restoredItems == null) {
             mItems = new ArrayList<>();
             itemDetailViewModel.bind().subscribe(new Observer<Item>() {
                 @Override
-                public void onSubscribe(@NonNull Disposable d) {
-                }
+                public void onSubscribe(@NonNull Disposable d) {}
 
                 @Override
                 public void onNext(@NonNull Item comment) {
+                    if (mItems.size() == 1) {
+                        firstItemListener.onFirstItemFetched();
+                    }
+
                     mItems.add(comment);
                     notifyItemInserted(mItems.size());
                 }
 
                 @Override
-                public void onError(@NonNull Throwable e) {
-                }
+                public void onError(@NonNull Throwable e) {}
 
                 @Override
                 public void onComplete() {
@@ -97,5 +100,9 @@ public class ItemDetailAdapter extends RecyclerView.Adapter {
         if (mComplete) {
             bundle.putParcelableArrayList(key, (ArrayList) mItems);
         }
+    }
+
+    public interface FirstItemListener {
+        void onFirstItemFetched();
     }
 }
