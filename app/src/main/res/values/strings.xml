@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Hacker News</string>
+    <string name="app_name">Simple HN</string>
 
     <string name="font_regular">fonts/Quicksand-Medium.ttf</string>
     <string name="font_italicized">fonts/Quicksand-Medium.ttf</string>

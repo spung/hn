@@ -5,6 +5,8 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.widget.TextView;
 
 import com.hn.R;
 import com.hn.shared.BaseActivity;
@@ -24,6 +26,8 @@ public class ItemsActivity extends BaseActivity {
     @Inject TopItemsViewModel mTopItemsViewModel;
 
     @BindView(R.id.topItems) RecyclerView mTopItemsRecyclerView;
+    @BindView(R.id.toolbarTitle) TextView mToolbarTitle;
+    @BindView(R.id.toolbar) Toolbar mToolbar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -31,6 +35,9 @@ public class ItemsActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         mTopItemsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mTopItemsViewModel.setLauncher(this);
