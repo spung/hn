@@ -8,7 +8,8 @@
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp">
+        android:layout_height="200dp"
+        app:elevation="0dp">
 
         <net.opacapp.multilinecollapsingtoolbar.CollapsingToolbarLayout
             android:id="@+id/collapsingToolbar"
@@ -43,21 +44,27 @@
         </net.opacapp.multilinecollapsingtoolbar.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <ProgressBar
-            android:id="@+id/progressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"/>
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/comments"
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white"/>
-    </FrameLayout>
+            android:background="?attr/colorPrimary"
+            android:elevation="2dp"
+            app:tabIndicatorColor="@color/white"
+            app:tabIndicatorHeight="2dp"
+            app:tabSelectedTextColor="@color/white"
+            app:tabTextColor="@color/white_semi_transparent"/>
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/viewPager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </LinearLayout>
+
 </android.support.design.widget.CoordinatorLayout>
