@@ -2,6 +2,7 @@ package com.hn.screen.items;
 
 import com.hn.data.Item;
 import com.hn.network.ApiClient;
+import com.hn.shared.EventTracker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +18,8 @@ import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
+
+import static com.hn.shared.EventTypes.VIEW_LAST_TOP_ITEM;
 
 /**
  * Created by stevenpungdumri on 6/27/17.
@@ -63,10 +66,15 @@ public class TopItemsProviderModule {
             return;
         }
 
-        if (mFetchingItems || mIndex == mIds.size()) return;
+        if (mFetchingItems || mIndex >= mIds.size()) {
+            if (mIndex >= mIds.size()) {
+                EventTracker.trackEvent(VIEW_LAST_TOP_ITEM);
+            }
+            return;
+        }
         mFetchingItems = true;
 
-        int toIndex = mIndex + mItemsPerPage;
+        int toIndex = Math.min(mIndex + mItemsPerPage, mIds.size());
         if (mIndex >= mIds.size()) {
             mIndex = Math.min(mIndex, mIds.size());
             toIndex = mIds.size();

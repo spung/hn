@@ -11,6 +11,8 @@ import android.support.v7.widget.Toolbar;
 
 import com.hn.R;
 import com.hn.shared.BaseActivity;
+import com.hn.shared.EventTracker;
+import com.hn.shared.EventTypes;
 import com.hn.shared.ResHelper;
 
 import java.util.ArrayList;
@@ -64,6 +66,7 @@ public class ItemsActivity extends BaseActivity {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                EventTracker.trackEvent(EventTypes.PULLED_TO_REFRESH);
                 mTopItemsViewModel.onSwipedToRefresh();
                 new Handler().postDelayed(new Runnable() {
                     @Override
@@ -73,6 +76,8 @@ public class ItemsActivity extends BaseActivity {
                 }, 1000);
             }
         });
+
+        EventTracker.trackEvent(EventTypes.VIEW_TOP_ITEMS);
     }
 
     @Override

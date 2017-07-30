@@ -11,4 +11,5 @@ public interface Launcher {
     void launchActivity(Intent intent);
     Context getContext();
     void launchShareIntent(String link);
+    void launchBrowserIntent(String link);
 }

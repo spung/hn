@@ -3,9 +3,12 @@ package com.hn.screen.itemdetail;
 import android.text.TextUtils;
 
 import com.hn.data.Item;
+import com.hn.shared.EventTracker;
 import com.hn.shared.Launcher;
 
 import io.reactivex.Observable;
+
+import static com.hn.shared.EventTypes.CLICK_OPEN_IN_BROWSER;
 
 /**
  * Created by stevenpungdumri on 7/5/17.
@@ -45,5 +48,10 @@ public class ItemDetailViewModel {
                 mLauncher.launchShareIntent(mItem.getUrl());
             }
         }
+    }
+
+    public void onOpenInBrowserClicked() {
+        EventTracker.trackItemEvent(CLICK_OPEN_IN_BROWSER, mItem);
+        mLauncher.launchBrowserIntent(mItem.getUrl());
     }
 }

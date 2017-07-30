@@ -1,6 +1,7 @@
 package com.hn.shared;
 
 import android.app.Application;
+import android.content.Context;
 
 import com.crashlytics.android.Crashlytics;
 import com.hn.BuildConfig;
@@ -16,8 +17,12 @@ import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
  */
 
 public class App extends Application {
-
+    private static Application sApp;
     private AppComponent mAppComponent;
+
+    public App() {
+        sApp = this;
+    }
 
     @Override
     public void onCreate() {
@@ -33,6 +38,7 @@ public class App extends Application {
             Timber.plant(new Timber.DebugTree());
         } else {
             Timber.plant(new CrashlyticsTree());
+            Timber.plant(new FirebaseTree());
         }
 
         mAppComponent = DaggerAppComponent.builder()
@@ -42,5 +48,13 @@ public class App extends Application {
 
     public AppComponent getAppComponent() {
         return mAppComponent;
+    }
+
+    public static Context getAppContext() {
+        return sApp.getApplicationContext();
+    }
+
+    public static boolean isDebugMode() {
+        return BuildConfig.DEBUG;
     }
 }

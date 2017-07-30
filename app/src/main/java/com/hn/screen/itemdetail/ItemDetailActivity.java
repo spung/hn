@@ -3,9 +3,11 @@ package com.hn.screen.itemdetail;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,6 +17,8 @@ import com.hn.R;
 import com.hn.data.Item;
 import com.hn.network.ApiClient;
 import com.hn.shared.BaseActivity;
+import com.hn.shared.EventTracker;
+import com.hn.shared.EventTypes;
 import com.hn.shared.FontUtil;
 
 import net.opacapp.multilinecollapsingtoolbar.CollapsingToolbarLayout;
@@ -23,6 +27,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by stevenpungdumri on 7/5/17.
@@ -42,9 +47,11 @@ public class ItemDetailActivity extends BaseActivity {
 
     @BindView(R.id.tabLayout) TabLayout mTabLayout;
     @BindView(R.id.viewPager) ViewPager mViewPager;
+    @BindView(R.id.openInBrowserFAB) FloatingActionButton mFloatingActionButton;
 
     @BindView(R.id.author) TextView mAuthorTextView;
     private ItemDetailPageAdapter mPageAdapter;
+    private Item mItem;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -53,17 +60,43 @@ public class ItemDetailActivity extends BaseActivity {
         setContentView(R.layout.activity_item_detail);
         ButterKnife.bind(this);
 
-        Item item = getIntent().getParcelableExtra(EXTRA_ITEM);
-        mItemDetailViewModel = new ItemDetailViewModel(item, new CommentsProvider(mApiClient, item));
+        mItem = getIntent().getParcelableExtra(EXTRA_ITEM);
+        mItemDetailViewModel = new ItemDetailViewModel(mItem, new CommentsProvider(mApiClient, mItem));
         mItemDetailViewModel.setLauncher(this);
-        mPageAdapter = new ItemDetailPageAdapter(mItemDetailViewModel, item);
+        mPageAdapter = new ItemDetailPageAdapter(mItemDetailViewModel, mItem);
         mViewPager.setAdapter(mPageAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
+        EventTracker.trackItemEvent(EventTypes.VIEW_ITEM_COMMENTS, mItem); // capture the default to comments tab
+
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
+
+            @Override
+            public void onPageSelected(int position) {
+                if (position == ItemDetailPageAdapter.COMMENT_POSITION) {
+                    EventTracker.trackItemEvent(EventTypes.VIEW_ITEM_COMMENTS, mItem);
+                    mFloatingActionButton.hide();
+                } else if (position == ItemDetailPageAdapter.DETAILS_POSITION) {
+                    EventTracker.trackItemEvent(EventTypes.VIEW_ITEM_DETAILS, mItem);
+                    if (!TextUtils.isEmpty(mItem.getUrl())) {
+                        mFloatingActionButton.show();
+                    }
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {}
+        });
 
         Typeface typeface = FontUtil.getDefaultFont(this);
-        initCollapsingToolbar(item.getTitle(), R.drawable.back, typeface, typeface);
+        initCollapsingToolbar(mItem.getTitle(), R.drawable.back, typeface, typeface);
 
-        initItemDetailViews(item);
+        initItemDetailViews(mItem);
+    }
+
+    @OnClick(R.id.openInBrowserFAB) void onOpenInBrowserFABClicked() {
+        mItemDetailViewModel.onOpenInBrowserClicked();
     }
 
     @Override
@@ -75,6 +108,7 @@ public class ItemDetailActivity extends BaseActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         mItemDetailViewModel.onShareClicked();
+        EventTracker.trackItemEvent(EventTypes.CLICK_ITEM_SHARE, mItem);
         return super.onOptionsItemSelected(item);
     }
 

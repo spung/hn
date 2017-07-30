@@ -13,8 +13,8 @@ import com.hn.data.Item;
  */
 
 public class ItemDetailPageAdapter extends PagerAdapter {
-    private static final int COMMENT_POSITION = 0;
-    private static final int DETAILS_POSITION = 1;
+    public static final int COMMENT_POSITION = 0;
+    public static final int DETAILS_POSITION = 1;
     private Item mItem;
     private ItemDetailViewModel mViewModel;
     private final String[] mTitles = new String[] { "COMMENTS", "DETAILS" };
