@@ -54,14 +54,10 @@ public class ItemDetailPageAdapter extends PagerAdapter {
 
     @Override
     public boolean isViewFromObject(View view, Object object) {
-        return view == object;
+        return view.equals(object);
     }
 
     public boolean onBackPressed(int currentIndex) {
-        if (currentIndex == DETAILS_POSITION && mItemDetailsContentView.onBackPressed()) {
-            return true;
-        }
-
-        return false;
+        return currentIndex == DETAILS_POSITION && mItemDetailsContentView.onBackPressed();
     }
 }

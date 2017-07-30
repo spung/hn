@@ -20,7 +20,6 @@ import butterknife.ButterKnife;
 
 public class CommentViewHolder extends RecyclerView.ViewHolder {
     private static int sIndentation;
-    private Item mItem;
 
     @BindView(R.id.author) TextView mAuthorTextView;
     @BindView(R.id.text) TextView mTextTextView;
@@ -33,8 +32,7 @@ public class CommentViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void bindView(Item item) {
-        mItem = item;
-        mAuthorTextView.setText(mItem.getBy());
+        mAuthorTextView.setText(item.getBy());
         mTextTextView.setText(Html.fromHtml(item.getText()).toString().trim());
         ((FrameLayout.LayoutParams) mCommentLinearLayout.getLayoutParams()).leftMargin =
             sIndentation * (item.getIndentation() - 1);

@@ -1,5 +1,6 @@
 package com.hn.screen.itemdetail;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.NestedScrollView;
@@ -59,6 +60,7 @@ public class ItemDetailsContentView extends NestedScrollView {
         return false;
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     private void init() {
         ButterKnife.bind(inflate(getContext(), R.layout.layout_item_detail_content, this));
         mWebView.setWebViewClient(new OverrideWebviewClient());
@@ -66,7 +68,7 @@ public class ItemDetailsContentView extends NestedScrollView {
         mWebView.getSettings().setDomStorageEnabled(true);
     }
 
-    private class OverrideWebviewClient extends WebViewClient {
+    private static class OverrideWebviewClient extends WebViewClient {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
             view.loadUrl(url);

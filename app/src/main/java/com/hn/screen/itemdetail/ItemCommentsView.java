@@ -24,7 +24,6 @@ import butterknife.ButterKnife;
  */
 
 public class ItemCommentsView extends FrameLayout {
-    private ItemDetailViewModel mItemDetailViewModel;
 
     @BindView(R.id.comments) RecyclerView mCommentsRecyclerView;
     @BindView(R.id.progressBar) View mProgressBarView;
@@ -47,9 +46,8 @@ public class ItemCommentsView extends FrameLayout {
 
     public void setItem(ItemDetailViewModel viewModel) {
         Context context = getContext();
-        mItemDetailViewModel = viewModel;
 
-        if (mItemDetailViewModel.hasComments()) {
+        if (viewModel.hasComments()) {
             mNoCommentsTextView.setVisibility(GONE);
         } else {
             mProgressBarView.setVisibility(GONE);
@@ -59,7 +57,7 @@ public class ItemCommentsView extends FrameLayout {
         // TODO: implement save instance states for screen rotations so the user doesn't lose their place in comments
 //        ArrayList restoredData = savedInstanceState == null ? null : savedInstanceState.getParcelableArrayList(ADAPTER_DATASET);
         ArrayList restoredData = null;
-        mCommentsRecyclerView.setAdapter(new CommentsAdapter(mItemDetailViewModel, restoredData,
+        mCommentsRecyclerView.setAdapter(new CommentsAdapter(viewModel, restoredData,
             new CommentsAdapter.FirstItemListener() {
                 @Override
                 public void onFirstItemFetched() {

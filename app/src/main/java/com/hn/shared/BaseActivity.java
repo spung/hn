@@ -15,7 +15,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
  * Created by stevenpungdumri on 6/29/17.
  */
 
-public class BaseActivity extends AppCompatActivity implements Launcher {
+public abstract class BaseActivity extends AppCompatActivity implements Launcher {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {

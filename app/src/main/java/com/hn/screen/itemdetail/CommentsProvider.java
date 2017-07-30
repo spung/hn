@@ -21,7 +21,7 @@ public class CommentsProvider {
     }
 
     public Observable<Item> bind() {
-        if (mItem.getComments() != null && !mItem.getComments().isEmpty()) {
+        if (!mItem.getComments().isEmpty()) {
             return Observable.fromIterable(mItem.getComments());
         }
 

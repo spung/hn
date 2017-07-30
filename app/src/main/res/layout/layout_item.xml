@@ -61,6 +61,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/comment"
             android:layout_gravity="center_horizontal"
+            android:contentDescription="comment"
             android:tint="@color/light_grey"/>
 
         <TextView
