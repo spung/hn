@@ -35,5 +35,6 @@ public class MockApiClientModule implements ApiClient {
         return Observable.just(MockItem.createMockItem(0));
     }
 
-
+    @Override
+    public void clearCache() {}
 }

@@ -19,10 +19,15 @@ import io.reactivex.Observable;
 public class TopItemsViewModel {
     private TopItemsProviderModule mTopItemsProviderModule;
     private Launcher mLauncher;
+    private ClearItemsListener mClearItemsListener;
 
     @Inject
     public TopItemsViewModel(TopItemsProviderModule topItemsProviderModule) {
         mTopItemsProviderModule = topItemsProviderModule;
+    }
+
+    public void setClearItemsListener(ClearItemsListener clearItemsListener) {
+        mClearItemsListener = clearItemsListener;
     }
 
     public void setLauncher(Launcher launcher) {
@@ -45,5 +50,15 @@ public class TopItemsViewModel {
 
     public void setLastIndex(int index) {
         mTopItemsProviderModule.setIndex(index);
+    }
+
+    public void onSwipedToRefresh() {
+        if (mClearItemsListener != null && mTopItemsProviderModule.clearCacheAndReload()) {
+            mClearItemsListener.clearItems();
+        }
+    }
+
+    public interface ClearItemsListener {
+        void clearItems();
     }
 }

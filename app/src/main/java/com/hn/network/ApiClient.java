@@ -16,4 +16,6 @@ public interface ApiClient {
     Observable<Item> getItems(List<Long> ids);
 
     Observable<Item> getComments(Item item);
+
+    void clearCache();
 }

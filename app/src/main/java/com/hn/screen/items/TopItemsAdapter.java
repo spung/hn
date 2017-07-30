@@ -19,7 +19,8 @@ import io.reactivex.disposables.Disposable;
  * Created by stevenpungdumri on 6/25/17.
  */
 
-public class TopItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class TopItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
+    implements TopItemsViewModel.ClearItemsListener {
     private static final int ITEM_SPINNER_THRESHOLD = 8;
 
     private static final int NORMAL_ITEM_TYPE = 0;
@@ -104,5 +105,11 @@ public class TopItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public int getItemCount() {
         return mItems.size() > ITEM_SPINNER_THRESHOLD ? mItems.size() + 1 : mItems.size();
+    }
+
+    @Override
+    public void clearItems() {
+        mItems.clear();
+        notifyDataSetChanged();
     }
 }

@@ -98,6 +98,16 @@ public class TopItemsProviderModule {
             });
     }
 
+    public boolean clearCacheAndReload() {
+        if (mFetchingItems) return false;
+
+        mIndex = 0;
+        mIds.clear();
+        mApiClient.clearCache();
+        fetchTopItemIds();
+        return true;
+    }
+
     private void fetchTopItemIds() {
         if (mIds != null && !mIds.isEmpty()) return;
 

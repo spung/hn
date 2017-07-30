@@ -107,6 +107,11 @@ public class HnApiClientModule implements ApiClient {
     }
 
     @Override
+    public void clearCache() {
+        mCache.clear();
+    }
+
+    @Override
     public Observable<Item> getComments(final Item parentItem) {
         if (parentItem.getKids() == null || parentItem.getKids().isEmpty()) {
             return Observable.just(parentItem);
