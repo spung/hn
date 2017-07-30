@@ -10,4 +10,5 @@ import android.content.Intent;
 public interface Launcher {
     void launchActivity(Intent intent);
     Context getContext();
+    void launchShareIntent(String link);
 }

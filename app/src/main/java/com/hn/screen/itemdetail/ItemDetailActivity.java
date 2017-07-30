@@ -6,6 +6,8 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -31,6 +33,8 @@ public class ItemDetailActivity extends BaseActivity {
     private static final String LAYOUT_MANAGER = "layout_manager";
     private static final String ADAPTER_DATASET = "adapter_dataset";
 
+    private ItemDetailViewModel mItemDetailViewModel;
+
     @Inject ApiClient mApiClient;
 
     @BindView(R.id.toolbar) Toolbar mToolbar;
@@ -49,15 +53,27 @@ public class ItemDetailActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         Item item = getIntent().getParcelableExtra(EXTRA_ITEM);
-
-        mViewPager.setAdapter(new ItemDetailPageAdapter(
-            new ItemDetailViewModel(item, new CommentsProvider(mApiClient, item)), item));
+        mItemDetailViewModel = new ItemDetailViewModel(item, new CommentsProvider(mApiClient, item));
+        mItemDetailViewModel.setLauncher(this);
+        mViewPager.setAdapter(new ItemDetailPageAdapter(mItemDetailViewModel, item));
         mTabLayout.setupWithViewPager(mViewPager);
 
         Typeface typeface = FontUtil.getDefaultFont(this);
         initCollapsingToolbar(item.getTitle(), R.drawable.back, typeface, typeface);
 
         initItemDetailViews(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.item_detail_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        mItemDetailViewModel.onShareClicked();
+        return super.onOptionsItemSelected(item);
     }
 
     // TODO: implement save instance states for screen rotations so the user doesn't lose their place in comments

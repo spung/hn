@@ -1,6 +1,9 @@
 package com.hn.screen.itemdetail;
 
+import android.text.TextUtils;
+
 import com.hn.data.Item;
+import com.hn.shared.Launcher;
 
 import io.reactivex.Observable;
 
@@ -11,10 +14,15 @@ import io.reactivex.Observable;
 public class ItemDetailViewModel {
     private CommentsProvider mCommentsProvider;
     private Item mItem;
+    private Launcher mLauncher;
 
     public ItemDetailViewModel(Item item, CommentsProvider commentsProvider) {
         mCommentsProvider = commentsProvider;
         mItem = item;
+    }
+
+    public void setLauncher(Launcher launcher) {
+        mLauncher = launcher;
     }
 
     public String getItemTitle() {
@@ -23,5 +31,15 @@ public class ItemDetailViewModel {
 
     public Observable<Item> bind() {
         return mCommentsProvider.bind();
+    }
+
+    public void onShareClicked() {
+        if (mLauncher != null) {
+            if (TextUtils.isEmpty(mItem.getUrl())) {
+                mLauncher.launchShareIntent("https://news.ycombinator.com/item?id=" + mItem.getId());
+            } else {
+                mLauncher.launchShareIntent(mItem.getUrl());
+            }
+        }
     }
 }
