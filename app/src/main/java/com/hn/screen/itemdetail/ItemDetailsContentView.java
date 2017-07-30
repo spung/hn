@@ -3,6 +3,7 @@ package com.hn.screen.itemdetail;
 import android.content.Context;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.NestedScrollView;
+import android.text.Html;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.webkit.WebView;
@@ -40,7 +41,7 @@ public class ItemDetailsContentView extends NestedScrollView {
 
     public void setItem(Item item) {
         if (TextUtils.isEmpty(item.getUrl())) {
-            mTextView.setText(item.getText());
+            mTextView.setText(Html.fromHtml(item.getText()));
             mWebView.setVisibility(GONE);
         } else {
             mWebView.loadUrl(item.getUrl());
@@ -51,6 +52,8 @@ public class ItemDetailsContentView extends NestedScrollView {
     private void init() {
         ButterKnife.bind(inflate(getContext(), R.layout.layout_item_detail_content, this));
         mWebView.setWebViewClient(new OverrideWebviewClient());
+        mWebView.getSettings().setJavaScriptEnabled(true);
+        mWebView.getSettings().setDomStorageEnabled(true);
     }
 
     private class OverrideWebviewClient extends WebViewClient {
