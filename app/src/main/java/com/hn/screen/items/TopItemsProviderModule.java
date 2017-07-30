@@ -3,6 +3,7 @@ package com.hn.screen.items;
 import com.hn.data.Item;
 import com.hn.network.ApiClient;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Singleton;
@@ -29,7 +30,7 @@ public class TopItemsProviderModule {
     private static final int STORIES_BUFFER = 1;
 
     private int mItemsPerPage;
-    private List<Long> mIds;
+    private List<Long> mIds = new ArrayList<>();
     private int mIndex;
     private PublishSubject mItemsPubSub = PublishSubject.create();
 
