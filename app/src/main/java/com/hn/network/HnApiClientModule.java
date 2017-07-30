@@ -113,7 +113,7 @@ public class HnApiClientModule implements ApiClient {
 
     @Override
     public Observable<Item> getComments(final Item parentItem) {
-        if (parentItem.getKids().isEmpty()) {
+        if (parentItem.getKids() == null || parentItem.getKids().isEmpty()) {
             return Observable.just(parentItem);
         } else {
             return Observable.merge(
