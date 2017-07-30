@@ -15,6 +15,9 @@ import butterknife.ButterKnife;
  */
 
 public class ItemViewHolder extends RecyclerView.ViewHolder {
+    private static final float COMMENTS_ALPHA = 1.0F;
+    private static final float NO_COMMENTS_ALPHA = 0.40F;
+
     private Item mItem;
 
     @BindView(R.id.index) TextView mIndexTextView;
@@ -44,9 +47,9 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
 
         mCommentCount.setText(mItem.getDescendants() + "");
         if (mItem.getDescendants() > 0) {
-            mCommentSection.setAlpha(1.0f);
+            mCommentSection.setAlpha(COMMENTS_ALPHA);
         } else {
-            mCommentSection.setAlpha(0.25f);
+            mCommentSection.setAlpha(NO_COMMENTS_ALPHA);
         }
     }
 }

@@ -21,6 +21,10 @@ public class ItemDetailViewModel {
         mItem = item;
     }
 
+    public boolean hasComments() {
+        return !mItem.getKids().isEmpty();
+    }
+
     public void setLauncher(Launcher launcher) {
         mLauncher = launcher;
     }

@@ -28,6 +28,7 @@ public class ItemCommentsView extends FrameLayout {
 
     @BindView(R.id.comments) RecyclerView mCommentsRecyclerView;
     @BindView(R.id.progressBar) View mProgressBarView;
+    @BindView(R.id.noCommentsTextView) View mNoCommentsTextView;
 
     public ItemCommentsView(@NonNull Context context) {
         super(context);
@@ -47,6 +48,12 @@ public class ItemCommentsView extends FrameLayout {
     public void setItem(ItemDetailViewModel viewModel) {
         Context context = getContext();
         mItemDetailViewModel = viewModel;
+
+        if (mItemDetailViewModel.hasComments()) {
+            mNoCommentsTextView.setVisibility(GONE);
+        } else {
+            mProgressBarView.setVisibility(GONE);
+        }
 
         mCommentsRecyclerView.setLayoutManager(new LinearLayoutManager(context));
         // TODO: implement save instance states for screen rotations so the user doesn't lose their place in comments
