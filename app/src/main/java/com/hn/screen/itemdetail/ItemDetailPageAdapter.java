@@ -14,9 +14,11 @@ import com.hn.data.Item;
 
 public class ItemDetailPageAdapter extends PagerAdapter {
     private static final int COMMENT_POSITION = 0;
+    private static final int DETAILS_POSITION = 1;
     private Item mItem;
     private ItemDetailViewModel mViewModel;
     private final String[] mTitles = new String[] { "COMMENTS", "DETAILS" };
+    private ItemDetailsContentView mItemDetailsContentView;
 
     public ItemDetailPageAdapter(ItemDetailViewModel viewModel, Item item) {
         mItem = item;
@@ -36,8 +38,9 @@ public class ItemDetailPageAdapter extends PagerAdapter {
             layout = (ViewGroup) inflater.inflate(R.layout.layout_item_detail_comments_page, container, false);
             ((ItemCommentsView) layout).setItem(mViewModel);
         } else {
-            layout = (ViewGroup) inflater.inflate(R.layout.layout_item_detail_content_page, container, false);
-            ((ItemDetailsContentView) layout).setItem(mItem);
+            mItemDetailsContentView = (ItemDetailsContentView) inflater.inflate(R.layout.layout_item_detail_content_page, container, false);
+            mItemDetailsContentView.setItem(mItem);
+            layout = mItemDetailsContentView;
         }
 
         container.addView(layout);
@@ -52,5 +55,13 @@ public class ItemDetailPageAdapter extends PagerAdapter {
     @Override
     public boolean isViewFromObject(View view, Object object) {
         return view == object;
+    }
+
+    public boolean onBackPressed(int currentIndex) {
+        if (currentIndex == DETAILS_POSITION && mItemDetailsContentView.onBackPressed()) {
+            return true;
+        }
+
+        return false;
     }
 }

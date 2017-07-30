@@ -44,6 +44,7 @@ public class ItemDetailActivity extends BaseActivity {
     @BindView(R.id.viewPager) ViewPager mViewPager;
 
     @BindView(R.id.author) TextView mAuthorTextView;
+    private ItemDetailPageAdapter mPageAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -55,7 +56,8 @@ public class ItemDetailActivity extends BaseActivity {
         Item item = getIntent().getParcelableExtra(EXTRA_ITEM);
         mItemDetailViewModel = new ItemDetailViewModel(item, new CommentsProvider(mApiClient, item));
         mItemDetailViewModel.setLauncher(this);
-        mViewPager.setAdapter(new ItemDetailPageAdapter(mItemDetailViewModel, item));
+        mPageAdapter = new ItemDetailPageAdapter(mItemDetailViewModel, item);
+        mViewPager.setAdapter(mPageAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
 
         Typeface typeface = FontUtil.getDefaultFont(this);
@@ -74,6 +76,13 @@ public class ItemDetailActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         mItemDetailViewModel.onShareClicked();
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (!mPageAdapter.onBackPressed(mViewPager.getCurrentItem())) {
+            super.onBackPressed();
+        }
     }
 
     // TODO: implement save instance states for screen rotations so the user doesn't lose their place in comments

@@ -49,6 +49,15 @@ public class ItemDetailsContentView extends NestedScrollView {
         }
     }
 
+    public boolean onBackPressed() {
+        if (mWebView.canGoBack()) {
+            mWebView.goBack();
+            return true;
+        }
+
+        return false;
+    }
+
     private void init() {
         ButterKnife.bind(inflate(getContext(), R.layout.layout_item_detail_content, this));
         mWebView.setWebViewClient(new OverrideWebviewClient());
