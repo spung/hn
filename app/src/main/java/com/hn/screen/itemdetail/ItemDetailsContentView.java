@@ -41,7 +41,8 @@ public class ItemDetailsContentView extends NestedScrollView {
 
     public void setItem(Item item) {
         if (TextUtils.isEmpty(item.getUrl())) {
-            mTextView.setText(Html.fromHtml(item.getText()));
+            String text = item.getText();
+            mTextView.setText(Html.fromHtml(text == null ? "No content." : item.getText()));
             mWebView.setVisibility(GONE);
         } else {
             mWebView.loadUrl(item.getUrl());
