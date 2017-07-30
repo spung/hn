@@ -8,7 +8,6 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.widget.TextView;
 
 import com.hn.R;
 import com.hn.shared.BaseActivity;
@@ -32,7 +31,6 @@ public class ItemsActivity extends BaseActivity {
     @Inject TopItemsViewModel mTopItemsViewModel;
 
     @BindView(R.id.topItems) RecyclerView mTopItemsRecyclerView;
-    @BindView(R.id.toolbarTitle) TextView mToolbarTitle;
     @BindView(R.id.toolbar) Toolbar mToolbar;
     @BindView(R.id.swipeRefresh) SwipeRefreshLayout mSwipeRefreshLayout;
 
