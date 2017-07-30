@@ -7,7 +7,6 @@
     <string name="font_secondary">fonts/Quicksand-Medium.ttf</string>
 
     <string name="share_text">Share</string>
-    <string name="share_chooser_text">Share using:</string>
 
     <string name="no_comments_text">No comments yet.</string>
 </resources>
