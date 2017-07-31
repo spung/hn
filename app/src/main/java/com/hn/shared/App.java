@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 
 import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.core.CrashlyticsCore;
 import com.hn.BuildConfig;
 import com.hn.R;
 import com.hn.screen.items.TopItemsProviderModule;
@@ -33,7 +34,12 @@ public class App extends Application {
                 .setFontAttrId(R.attr.fontPath)
                 .build());
 
-        Fabric.with(this, new Crashlytics());
+        Crashlytics crashlyticsKit = new Crashlytics.Builder()
+            .core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build())
+            .build();
+
+        Fabric.with(this, crashlyticsKit);
+
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
         } else {
